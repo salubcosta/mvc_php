@@ -16,10 +16,12 @@ class core{
       $url = filter_var(strtolower(rtrim($_GET['url'])), FILTER_SANITIZE_URL);
 
       $url = explode('/',$url); //retorna um array
-      $controller = $this->verificaArray($url,0) ? $this->verificaArray($url,0).'Controller' : "homeController";
-      $action = $this->verificaArray($url,1) ? $this->verificaArray($url,0) : "index";
+      // print_r($url);
+      // exit; //teste
+      $controller = $this->verificarArray($url,0) ? $this->verificarArray($url,0).'Controller' : "homeController";
+      $action = $this->verificarArray($url,1) ? $this->verificarArray($url,1) : "index";
 
-      if($this->verificaArray($url,2)){
+      if($this->verificarArray($url,2)){
         unset($url[0]);
         unset($url[1]);
         $params = $url;
@@ -30,14 +32,21 @@ class core{
     }
 
     //Se não validar controller, uma opção seria chamar o arquivo 404.php
-    if(!$this->validaController($controller)){ exit;}
+    if(!$this->validaController($controller))
+    {
+      echo "Página (Controller) não encontrada. <br />Ótima opção seria chamar a página 404.php/html";
+      exit;
+    }
 
     //Se apenas uma chamada para o controller.php
     require_once DIRETORIO.'/core/controller.php';
 
     $_controller = new $controller;
     //Se não validar a action, uma opção seria chamar o arquivo 404.php
-    if(!$this->validaAction($_controller,$action)){ exit;}
+    if(!$this->validaAction($_controller,$action)){
+      echo "Página (Action/Método) não encontrada (Ou não implementado), por que o controller existe: {$controller}. <br />Ótima opção seria chamar a página 404.php/html";
+      exit;
+    }
 
     call_user_func_array(array($_controller, $action), $params);
   } //fim processarURL
@@ -46,11 +55,11 @@ class core{
    * Retorna o array em sua respectiva posição.
    * utlizando para trabalhar controllers e actions e verificar os params
    */
-  public function verficarArray($array, $key){
+  public function verificarArray($array, $key){
     if(isset($array[$key])){
       return $array[$key];
     }
-    return null;
+    return false;
   }
   //retorna true ou false na validação da existência do controller
   public function validaController($controller){
