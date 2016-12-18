@@ -1,6 +1,6 @@
 <?php
 
-class homeController extends Controller{
+class homeController extends controller{
 
   public function index(){
     //Função principal a ser executada caso não seja especificado uma action
