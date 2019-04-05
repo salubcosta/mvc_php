@@ -6,7 +6,7 @@
 define("ENVIRONMENT","development");
 
 // Esta constante define a URL BASE do projeto.
-define("URL_BASE","http://localhost/mvc_php");
+define("URL_BASE","http://localhost/projetos/mvc_php");
 
 // Esta constante define o diretório Pai
 define("DIRETORIO",dirname(__FILE__));
